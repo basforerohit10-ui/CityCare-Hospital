@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Profile | CityCare Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-container {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: slideUp 0.6s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #0066cc, #004999);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10"><defs><pattern id="grain" width="100" height="10" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="10" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        .profile-avatar {
+            width: 120px; height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            backdrop-filter: blur(10px);
+            border: 4px solid rgba(255,255,255,0.3);
+            position: relative; z-index: 2;
+        }
+        .profile-header h1 {
+            font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 2;
+        }
+        .profile-header .subtitle {
+            font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 2;
+        }
+        .profile-body {
+            padding: 50px;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .profile-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .profile-card h3 {
+            color: #1e293b;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .profile-field {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .profile-field:last-child { border-bottom: none; margin-bottom: 0; }
+        .profile-field i {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #0066cc, #004999);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .profile-field strong {
+            color: #475569;
+            font-weight: 600;
+            min-width: 100px;
+            font-size: 14px;
+        }
+        .profile-field span {
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-badge.pending { background: #fef3c7; color: #d97706; }
+        .status-badge.confirmed { background: #dcfce7; color: #16a34a; }
+        .status-badge.checked { background: #e0f2fe; color: #0284c7; }
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .action-btn.primary {
+            background: linear-gradient(135deg, #0066cc, #004999);
+            color: white;
+        }
+        .action-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,102,204,0.4);
+        }
+        .action-btn.secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        .back-btn {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.9);
+            color: #1e293b;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        @media (max-width: 768px) {
+            .profile-container { margin: 10px; }
+            .profile-body { padding: 30px 20px; }
+            .profile-grid { grid-template-columns: 1fr; gap: 20px; }
+            .profile-actions { flex-direction: column; }
+            .action-btn { justify-content: center; }
+        }
+        .print-btn { background: #f8f9fa; color: #6b7280; border: 2px solid #d1d5db; }
+        .print-btn:hover { background: #e5e7eb; }
+    </style>
+</head>
+<body>
+<script src="goToDashboard.js"></script>
+<button class="back-btn" onclick="goToDashboard()">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </button>
+    
+    <div class="profile-container" id="patientProfile">
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <h1 id="profileName">Loading...</h1>
+            <div class="subtitle" id="profileId">Patient ID: Loading...</div>
+        </div>
+        
+        <div class="profile-body">
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="profile-field">
+                        <i class="fas fa-calendar"></i>
+                        <strong>Age:</strong>
+                        <span id="profileAge">-</span>
+                    </div>
+                    <div class="profile-field">
+                        <i class="fas fa-venus-mars"></i>
+                        <strong>Gender:</strong>
+                        <span id="profileGender">-</span>
+                    </div>
+                    <div class="profile-field">
+                        <i class="fas fa-phone"></i>
+                        <strong>Phone:</strong>
+                        <span id="profilePhone">-</span>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <h3><i class="fas fa-stethoscope"></i> Medical Information</h3>
+                    <div class="profile-field">
+                        <i class="fas fa-hospital-user"></i>
+                        <strong>Department:</strong>
+                        <span id="profileDepartment">-</span>
+                    </div>
+                    <div class="profile-field">
+                        <i class="fas fa-user-md"></i>
+                        <strong>Doctor:</strong>
+                        <span id="profileDoctor">-</span>
+                    </div>
+                    <div class="profile-field">
+                        <i class="fas fa-clock"></i>
+                        <strong>Appointment:</strong>
+                        <span id="profileAppointment">-</span>
+                    </div>
+                    <div class="profile-field">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Status:</strong>
+                        <span id="profileStatus" class="status-badge">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-card" style="margin-bottom: 30px;">
+                <h3><i class="fas fa-notes-medical"></i> Symptoms & Notes</h3>
+                <div style="background: #f1f5f9; padding: 25px; border-radius: 15px; min-height: 120px;">
+                    <p id="profileSymptoms" style="color: #374151; line-height: 1.7; font-size: 15px;">Loading...</p>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <a href="#" class="action-btn primary" onclick="printProfile()">
+                    <i class="fas fa-print"></i> Print Profile
+                </a>
+                <a href="prescription.html" class="action-btn secondary">
+                    <i class="fas fa-prescription-bottle"></i> New Prescription
+                </a>
+                <a href="lab_reports.html" class="action-btn secondary">
+                    <i class="fas fa-flask"></i> Lab Orders
+                </a>
+                <a href="medical_record.html" class="action-btn secondary">
+                    <i class="fas fa-file-medical-alt"></i> Full Records
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const patientData = JSON.parse(localStorage.getItem('currentPatient') || '{}');
+            
+            if (Object.keys(patientData).length === 0) {
+                alert('No patient data found');
+                window.close();
+                return;
+            }
+            
+            // Populate profile
+            document.getElementById('profileAvatar').innerHTML = getInitials(patientData.patientName);
+            document.getElementById('profileName').textContent = patientData.patientName;
+            document.getElementById('profileId').textContent = `Patient ID: ${patientData.id}`;
+            document.getElementById('profileAge').textContent = patientData.age + ' years';
+            document.getElementById('profileGender').textContent = patientData.gender;
+            document.getElementById('profilePhone').textContent = patientData.phone;
+            document.getElementById('profileDepartment').textContent = patientData.department;
+            document.getElementById('profileDoctor').textContent = patientData.doctor;
+            document.getElementById('profileAppointment').textContent = `${patientData.appDate} at ${patientData.appTime}`;
+            document.getElementById('profileStatus').textContent = patientData.status;
+            document.getElementById('profileStatus').className = `status-badge ${getStatusClass(patientData.status)}`;
+            document.getElementById('profileSymptoms').textContent = patientData.symptoms || 'No symptoms noted';
+        };
+        
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+        
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'confirmed': return 'confirmed';
+                case 'pending': return 'pending';
+                case 'checked': 
+                case 'completed': return 'completed';
+                default: return 'pending';
+            }
+        }
+        
+        function printProfile() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

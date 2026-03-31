@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist Dashboard | CityCare Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .dashboard-header {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header .left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dashboard-header .receptionist-avatar {
+            width: 65px; height: 65px;
+            background: linear-gradient(135deg, #059669, #047857);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+
+        .dashboard-header .receptionist-info h2 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-header .receptionist-info p { 
+            color: #64748b; 
+            font-size: 13px; 
+        }
+
+        .dashboard-header .right { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .dashboard-header .date-badge {
+            background: #f1f5f9;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .dashboard-header .date-badge .day { 
+            font-size: 12px; 
+            color: #64748b; 
+        }
+
+        .dashboard-header .date-badge .date { 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #1e293b; 
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .logout-btn:hover { 
+            background: #fecaca; 
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card .icon {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card .icon.blue { 
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
+            color: #2563eb; 
+        }
+
+        .stat-card .icon.green { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            color: #16a34a; 
+        }
+
+        .stat-card .icon.orange { 
+            background: linear-gradient(135deg, #ffedd5, #fed7aa); 
+            color: #ea580c; 
+        }
+
+        .stat-card .icon.purple { 
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe); 
+            color: #9333ea; 
+        }
+
+        .stat-card .content h3 { 
+            font-size: 1.8rem; 
+            color: #1e293b; 
+            margin-bottom: 4px; 
+        }
+
+        .stat-card .content p { 
+            color: #64748b; 
+            font-size: 13px; 
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .checkins-card, .waiting-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-header h3 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h3 i { 
+            color: #3b82f6; 
+        }
+
+        .add-patient-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .add-patient-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .appointments-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .appointments-table thead {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 1;
+        }
+
+        .appointments-table th {
+            text-align: left;
+            padding: 12px 15px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .appointments-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .appointments-table tr:hover { 
+            background: #f8fafc; 
+        }
+
+        .patient-info { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
+
+        .patient-avatar {
+            width: 40px; 
+            height: 40px;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0284c7;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .patient-name { 
+            font-weight: 600; 
+            color: #1e293b; 
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.checkin { 
+            background: #dcfce7; 
+            color: #16a34a; 
+        }
+
+        .status-badge.waiting { 
+            background: #fef3c7; 
+            color: #d97706; 
+        }
+
+        .status-badge.completed { 
+            background: #e0f2fe; 
+            color: #0284c7; 
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .action-btn.checkin { 
+            background: #dcfce7; 
+            color: #16a34a; 
+        }
+
+        .action-btn.checkin:hover { 
+            background: #bbf7d0; 
+        }
+
+        .quick-actions-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .quick-actions-card h3 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-actions-card h3 i { 
+            color: #3b82f6; 
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .action-item {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .action-item:hover {
+            background: white;
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+        }
+
+        .action-item i { 
+            font-size: 28px; 
+            color: #3b82f6; 
+            margin-bottom: 12px; 
+        }
+
+        .action-item p { 
+            color: #334155; 
+            font-size: 13px; 
+            font-weight: 600; 
+        }
+
+        .recent-patients {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+            margin-top: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-header h3 {
+            color: #1e293b;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .view-all { 
+            color: #3b82f6; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 500; 
+        }
+
+        .patient-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+
+        .patient-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .patient-item:hover {
+            background: #e0f2fe;
+        }
+
+        .patient-item:hover { 
+            background: #f1f5f9; 
+        }
+
+        .patient-item .avatar {
+            width: 45px; 
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .patient-item .avatar.pink { 
+            background: linear-gradient(135deg, #fce7f3, #fbcfe8); 
+            color: #db2777; 
+        }
+
+        .patient-item .avatar.blue { 
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
+            color: #2563eb; 
+        }
+
+        .patient-item .avatar.green { 
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0); 
+            color: #16a34a; 
+        }
+
+        .patient-item .info { 
+            flex: 1; 
+        }
+
+        .patient-item .info h4 { 
+            color: #1e293b; 
+            font-size: 14px; 
+            margin-bottom: 3px; 
+        }
+
+        .patient-item .info p { 
+            color: #64748b; 
+            font-size: 12px; 
+        }
+
+        .patient-item .time { 
+            color: #94a3b8; 
+            font-size: 12px; 
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-grid { 
+                grid-template-columns: 1fr; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header { 
+                flex-direction: column; 
+                gap: 20px; 
+                text-align: center; 
+            }
+
+            .dashboard-header .left { 
+                flex-direction: column; 
+            }
+
+            .dashboard-stats { 
+                grid-template-columns: 1fr; 
+            }
+
+            .action-grid { 
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container" id="dashboardSection">
+        <div class="dashboard-header">
+            <div class="left">
+                <div class="receptionist-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="receptionist-info">
+                    <h2 id="displayReceptionistName">Priya Sharma</h2>
+                    <p id="displayReceptionistDeskId">Front Desk • FD-001</p>
+                </div>
+            </div>
+            <div class="right">
+                <div class="date-badge">
+                    <div class="day" id="currentDay">Wednesday</div>
+                    <div class="date" id="currentDate">15 Jan</div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card" onclick="scrollToCheckins()">
+                <div class="icon blue">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="content">
+                    <h3 id="todayCheckins">0</h3>
+                    <p>Today's Check-ins</p>
+                </div>
+            </div>
+            <div class="stat-card" onclick="showWaitingList()">
+                <div class="icon green">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="content">
+                    <h3 id="waitingCount">3</h3>
+                    <p>Waiting Patients</p>
+                </div>
+            </div>
+            <div class="stat-card" onclick="showTodaysAppointments()">
+                <div class="icon orange">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="content">
+                    <h3 id="todayAppointments">12</h3>
+                    <p>Today's Appointments</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="icon purple">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="content">
+                    <h3>98%</h3>
+                    <p>Check-in Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="checkins-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clipboard-check"></i> Today's Check-ins</h3>
+                    <button class="add-patient-btn" onclick="openCheckinModal()">
+                        <i class="fas fa-plus"></i> New Check-in
+                    </button>
+                </div>
+                
+                <div class="appointments-table-container">
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Phone</th>
+                                <th>Time</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkinsBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="waiting-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-clock"></i> Waiting Patients</h3>
+                </div>
+                <div class="patient-list" id="waitingList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions-card">
+            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            <div class="action-grid">
+                <div class="action-item" onclick="window.location.href='new_patient.html'">
+                    <i class="fas fa-user-plus"></i>
+                    <p>New Patient</p>
+                </div>
+                <div class="action-item" onclick="window.location.href='patient_details.html'">
+                    <i class="fas fa-search"></i>
+                    <p>Find Patient</p>
+                </div>
+                <div class="action-item" onclick="window.location.href='prescription.html'">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <p>Print Receipt</p>
+                </div>
+                <div class="action-item" onclick="window.location.href='schedule_appointment.html'">
+                    <i class="fas fa-calendar-plus"></i>
+                    <p>Book Appointment</p>
+                </div>
+                <div class="action-item" onclick="window.location.href='messages.html'">
+                    <i class="fas fa-sms"></i>
+                    <p>SMS Reminders</p>
+                </div>
+                <div class="action-item" onclick="generateDailyReport()">
+                    <i class="fas fa-file-export"></i>
+                    <p>Daily Report</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load receptionist data and initialize dashboard
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('receptionistLoggedIn') !== 'true') {
+                window.location.href = 'receptionist_login_fixed.html';
+                return;
+            }
+
+            // Load receptionist info
+            document.getElementById('displayReceptionistName').textContent = localStorage.getItem('receptionistName') || 'Receptionist';
+            document.getElementById('displayReceptionistDeskId').innerHTML = `Front Desk • <span>${localStorage.getItem('receptionistDeskId') || 'FD-001'}</span>`;
+
+            // Set date
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const now = new Date();
+            document.getElementById('currentDay').textContent = days[now.getDay()];
+            document.getElementById('currentDate').textContent = now.getDate() + ' ' + months[now.getMonth()];
+
+            loadCheckins();
+            loadWaitingPatients();
+            loadStats();
+        });
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('receptionistLoggedIn');
+                localStorage.removeItem('receptionistName');
+                localStorage.removeItem('receptionistDeskId');
+                window.location.href = 'home.html';
+            }
+        }
+
+        function loadCheckins() {
+            // Sample data - replace with real API/localStorage
+            const sampleCheckins = [
+                { name: 'Ankit Kumar', phone: '+91 98765 43210', time: '09:30 AM', department: 'Cardiology', status: 'checkin' },
+                { name: 'Sarita Patel', phone: '+91 87654 32109', time: '10:15 AM', department: 'Neurology', status: 'waiting' },
+                { name: 'Rajesh Johnson', phone: '+91 76543 21098', time: '11:00 AM', department: 'Orthopedics', status: 'checkin' }
+            ];
+
+            const tbody = document.getElementById('checkinsBody');
+            tbody.innerHTML = sampleCheckins.map(patient => {
+                const statusClass = patient.status === 'checkin' ? 'checkin' : 'waiting';
+                const initials = patient.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="patient-info">
+                                <div class="patient-avatar">${initials}</div>
+                                <div>
+                                    <div class="patient-name">${patient.name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${patient.phone}</td>
+                        <td>${patient.time}</td>
+                        <td>${patient.department}</td>
+                        <td><span class="status-badge ${statusClass}">${patient.status.toUpperCase()}</span></td>
+                        <td>
+                            <button class="action-btn ${statusClass}" onclick="completeCheckin('${patient.name}')">
+                                <i class="fas fa-check"></i> Complete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('todayCheckins').textContent = sampleCheckins.length;
+        }
+
+        function loadWaitingPatients() {
+            const sampleWaiting = [
+                { name: 'Sunita Mishra', department: 'Pediatrics', time: '15 min ago' },
+                { name: 'Amit Sharma', department: 'ENT', time: '5 min ago' },
+                { name: 'Lata Devi', department: 'General Medicine', time: 'now' }
+            ];
+
+            const list = document.getElementById('waitingList');
+            list.innerHTML = sampleWaiting.map((patient, index) => {
+                const color = ['pink', 'blue', 'green'][Math.floor(Math.random() * 3)];
+                const initials = patient.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                
+                return `
+                    <div class="patient-item" onclick="showPatientStatus(${index})">
+                        <div class="avatar ${color}">${initials}</div>
+                        <div class="info">
+                            <h4>${patient.name}</h4>
+                            <p>${patient.department}</p>
+                        </div>
+                        <div class="time">${patient.time}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('waitingCount').textContent = sampleWaiting.length;
+        }
+
+        function showPatientStatus(index) {
+            const sampleWaiting = [
+                { 
+                    patientName: 'Sunita Mishra', 
+                    department: 'Pediatrics', 
+                    age: '28',
+                    gender: 'Female',
+                    phone: '+91 98765 43215',
+                    doctor: 'Dr. Priya Patel',
+                    appDate: new Date().toLocaleDateString('en-IN'),
+                    appTime: '10:30 AM',
+                    symptoms: 'Routine checkup, blood test results pending',
+                    status: 'Consulting',
+                    id: 'PAT-001'
+                },
+                { 
+                    patientName: 'Amit Sharma', 
+                    department: 'ENT', 
+                    age: '42',
+                    gender: 'Male',
+                    phone: '+91 87654 32109',
+                    doctor: 'Dr. Rajesh Kumar',
+                    appDate: new Date().toLocaleDateString('en-IN'),
+                    appTime: '11:15 AM',
+                    symptoms: 'Ear infection follow-up, payment completed',
+                    status: 'Completed',
+                    id: 'PAT-002'
+                },
+                { 
+                    patientName: 'Lata Devi', 
+                    department: 'General Medicine', 
+                    age: '55',
+                    gender: 'Female',
+                    phone: '+91 76543 21098',
+                    doctor: 'Dr. Sunita Rani',
+                    appDate: new Date().toLocaleDateString('en-IN'),
+                    appTime: '12:00 PM',
+                    symptoms: 'Hypertension review, first time visitor',
+                    status: 'Waiting',
+                    id: 'PAT-003'
+                }
+            ];
+
+            const patient = sampleWaiting[index];
+            localStorage.setItem('currentPatient', JSON.stringify(patient));
+            window.location.href = 'patient_details.html';
+        }
+
+        function loadStats() {
+            document.getElementById('todayAppointments').textContent = 12;
+        }
+
+        function loadStats() {
+            document.getElementById('todayAppointments').textContent = 12;
+        }
+
+        function scrollToCheckins() {
+            document.querySelector('.checkins-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showWaitingList() {
+            document.querySelector('.waiting-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showTodaysAppointments() {
+            document.querySelector('.checkins-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openCheckinModal() {
+            alert('Check-in modal would open here');
+        }
+
+        function completeCheckin(name) {
+            alert(`Check-in completed for ${name}`);
+            loadCheckins();
+        }
+
+        function generateDailyReport() {
+            alert('Daily report generated');
+        }
+
+        function showPatientStatus(index) {
+            const sampleWaiting = [
+                { name: 'Sunita Mishra', department: 'Pediatrics', time: '15 min ago', status: 'Consulting with Dr. Patel', room: 'Room 205', notes: 'Blood test results pending' },
+                { name: 'Amit Sharma', department: 'ENT', time: '5 min ago', status: 'Payment completed', room: 'Billing Counter', notes: 'Receipt issued' },
+                { name: 'Lata Devi', department: 'General Medicine', time: 'now', status: 'Just checked in', room: 'Waiting Area', notes: 'First time visitor' }
+            ];
+            
+            const patient = sampleWaiting[index];
+            if (patient) {
+                alert(`Patient Status Update:\n\nName: ${patient.name}\nDepartment: ${patient.department}\nStatus: ${patient.status}\nLocation: ${patient.room}\nNotes: ${patient.notes}`);
+            }
+        }
+    </script>
+</body>
+</html>

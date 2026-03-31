@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityCare Hospital | Multi-Specialty Hospital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #e74c3c;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #333; }
+        
+        /* Header */
+        .header {
+            background: var(--dark);
+            color: white;
+            padding: 1rem 0;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem; font-weight: 700; color: var(--primary);
+            text-decoration: none;
+        }
+        .logo i { margin-right: 0.5rem; }
+        .nav-links {
+            display: flex; list-style: none; gap: 2rem;
+        }
+        .nav-links a {
+            color: white; text-decoration: none; font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .emergency-btn {
+            background: var(--secondary); color: white;
+            padding: 0.8rem 1.5rem; border-radius: 25px;
+            text-decoration: none; font-weight: 600;
+        }
+        
+        /* Hero */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                        url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxHK2wFnK8HCdMU2DpgmiVWdAaKquptkc3ew&s') center/cover;
+            display: flex; align-items: center; text-align: center; color: white;
+        }
+        .hero-content {
+            max-width: 800px; padding: 0 20px;
+        }
+        .hero h1 {
+            font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem;
+        }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; }
+        .btn {
+            display: inline-block; padding: 1rem 2.5rem;
+            background: var(--primary); color: white; text-decoration: none;
+            border-radius: 50px; font-weight: 600; transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(44,90,160,0.4); }
+        
+        /* Sections */
+        .section { padding: 80px 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section-title {
+            text-align: center; margin-bottom: 4rem;
+        }
+        .section-title h2 { font-size: 2.8rem; color: var(--dark); margin-bottom: 1rem; }
+        .section-title p { font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto; }
+        
+        /* About */
+        .about {
+            background: var(--light);
+        }
+        .about-grid {
+            text-align: center; max-width: 800px; margin: 0 auto;
+        }
+        .about-text h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--dark); }
+        .about-text p { margin-bottom: 1.5rem; color: #666; line-height: 1.7; }
+        
+        /* Services */
+        .services-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: white; padding: 2.5rem; text-align: center;
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s; cursor: pointer;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .service-icon {
+            font-size: 3.5rem; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .service-card h4 { font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark); }
+        .service-card p { color: #666; }
+        
+        /* Gallery */
+        .gallery {
+            background: linear-gradient(135deg, #f8fbff 0%, #e9f5ff 100%);
+            padding: 80px 0;
+        }
+        .gallery-title {
+            text-align: center; margin-bottom: 4rem;
+        }
+        .gallery-title h2 {
+            font-size: 2.8rem; color: var(--dark); margin-bottom: 1rem;
+        }
+        .gallery-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem; max-width: 1400px; margin: 0 auto;
+        }
+        .gallery-item {
+            height: 280px; 
+            border-radius: 20px; 
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12); 
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .gallery-item::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0,102,204,0.8), rgba(0,73,153,0.6));
+            opacity: 0; transition: all 0.4s ease;
+            z-index: 1;
+        }
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+        .gallery-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            position: relative; z-index: 0;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .gallery-overlay {
+            position: absolute; bottom: 20px; left: 20px; right: 20px;
+            color: white; opacity: 0; transition: all 0.4s ease; z-index: 2;
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1; transform: translateY(-10px);
+        }
+        .gallery-overlay h3 {
+            font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;
+        }
+        .gallery-overlay p {
+            font-size: 0.95rem; opacity: 0.9;
+        }
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .gallery-item { height: 250px; }
+        }
+        
+        /* CTA */
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white; text-align: center; padding: 100px 0;
+        }
+        .cta h2 { font-size: 3rem; margin-bottom: 1rem; }
+        .cta p { font-size: 1.3rem; margin-bottom: 2.5rem; opacity: 0.95; }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark); color: #ccc; padding: 60px 0 20px;
+        }
+        .footer-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .footer h4 { color: white; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        .footer p { margin-bottom: 1rem; }
+        .footer a { color: #ccc; text-decoration: none; transition: color 0.3s; }
+        .footer a:hover { color: var(--primary); }
+        .social-icons { display: flex; gap: 1rem; }
+        .social-icons a {
+            width: 45px; height: 45px; background: rgba(255,255,255,0.1);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .footer-bottom {
+            border-top: 1px solid #333; padding-top: 2rem; text-align: center;
+            margin-top: 3rem; color: #999; padding-bottom: 2rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero h1 { font-size: 2.5rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar - Fixed visibility -->
+<nav class="navbar" style="background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <div class="navbar-container">
+            <a href="home.html" class="logo">
+                <i class="fas fa-hospital" style="color: #0066cc;"></i>
+                <div class="logo-text">
+                    <span class="logo-main" style="color: #1a1a2e;">CityCare</span>
+                </div>
+            </a>
+            <ul class="nav-links" style="display: flex !important;">
+                <li><a href="home.html" class="active" style="color: #1a1a2e !important;">Home</a></li>
+                <li><a href="doctors.html" style="color: #1a1a2e !important;">Doctors</a></li>
+                <li><a href="appointment.html" style="color: #1a1a2e !important;">Appointment</a></li>
+                <li><a href="contact.html" style="color: #1a1a2e !important;">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="doctor_login.html" class="btn btn-secondary">Doctor Login</a>
+                <a href="tel:+917439450337" class="emergency-btn"><i class="fas fa-ambulance" style="color: #1a1a2e;"></i> Emergency</a>
+            </div>
+            <div class="menu-toggle"><i class="fas fa-bars" style="color: #1a1a2e;"></i></div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+<div class="hero-slider">
+            <div class="slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1585435557345-43b851909f11?w=1920&q=85');">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-award" style="color: #ffd700;"></i>
+                        NABH Accredited Hospital
+                    </div>
+                    <h1>CityCare<span>Hospital</span></h1>
+                    <p>World-class comprehensive healthcare with cutting-edge technology & 30+ expert specialists. NABH accredited excellence.</p>
+                    <div class="hero-buttons">
+                        <a href="appointment.html" class="btn btn-primary">
+                            Book Appointment <i class="fas fa-calendar-check"></i>
+                        </a>
+                        <a href="doctors.html" class="btn btn-white">
+                            Our Doctors <i class="fas fa-user-md"></i>
+                        </a>
+                    </div>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-clock" style="color: #0066cc;"></i>
+                            24/7 Emergency Services
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bed" style="color: #0066cc;"></i>
+                            500+ Beds Available
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-users" style="color: #0066cc;"></i>
+                            50K+ Happy Patients
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-stethoscope" style="color: #0066cc;"></i>
+                            25+ Specialties
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Why Choose CityCare Hospital?</h3>
+                    <p>CityCare Hospital is NABH accredited multi-specialty hospital located in Barasat, Kolkata. We provide world-class healthcare services with modern facilities and team of 30+ expert doctors across 25+ specialties.</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 3rem 0;">
+                        <div style="text-align: left;">
+                            <i class="fas fa-clock" style="color: #0066cc; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                            <h4>24/7 Emergency</h4>
+                            <p>Round the clock emergency services with dedicated ambulance fleet.</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <i class="fas fa-award" style="color: #0066cc; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                            <h4>NABH Certified</h4>
+                            <p>Quality assured healthcare meeting international standards.</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <i class="fas fa-bed-pulse" style="color: #0066cc; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                            <h4>Advanced ICU</h4>
+                            <p>State-of-the-art ICU with 50+ beds and latest monitoring equipment.</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <i class="fas fa-heart-pulse" style="color: #0066cc; font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                            <h4>Expert Doctors</h4>
+                            <p>30+ experienced specialists across all major medical specialties.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="appointment.html" class="btn btn-primary" style="background: linear-gradient(135deg, #0066cc, #004999);">Book Appointment</a>
+                        <a href="doctors.html" class="btn" style="background: white; color: #0066cc; border: 2px solid #0066cc;">Meet Our Doctors</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+Comprehensive care across all major oncology specialties
+            </div>
+            <div class="services-grid">
+<div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h4>Medical Oncology</h4>
+                    <p>Systemic chemotherapy & immunotherapy</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-radiation" class="service-icon"></i>
+                    <h4>Radiation Oncology</h4>
+                    <p>Advanced IMRT, IGRT, SBRT radiation therapy</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-cut" class="service-icon"></i>
+                    <h4>Surgical Oncology</h4>
+                    <p>Cancer surgeries & organ preservation</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-pills" class="service-icon"></i>
+                    <h4>Chemotherapy Unit</h4>
+                    <p>24/7 chemotherapy day care services</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-vials" class="service-icon"></i>
+                    <h4>Hematology Oncology</h4>
+                    <p>Blood cancer & bone marrow treatment</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-hand-holding-heart" class="service-icon"></i>
+                    <h4>Palliative Care</h4>
+                    <p>Comprehensive cancer pain management</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Facilities</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://static.vecteezy.com/system/resources/previews/070/423/366/non_2x/modern-hospital-reception-area-with-professional-design-free-photo.jpg" alt="Modern Hospital Lobby">
+                    <div class="gallery-overlay">
+                        <h3>Modern Hospital Lobby</h3>
+                        <p>Welcome & Registration Area</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://jeevandanhealth.org/public/storage/photo/vF24oKrhkcBuaDXD0gDY7RTqlgv4aPcuGYQxeAn4.webp" alt="Advanced OT">
+                    <div class="gallery-overlay">
+                        <h3>Advanced OT</h3>
+                        <p>State-of-the-art surgery suites</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb3c8mHO-OxvbJRa5lZvPsrhR70QnWr8-SwA&s" alt="Pathology Lab">
+                    <div class="gallery-overlay">
+                        <h3>Pathology Lab</h3>
+                        <p>24/7 diagnostic services</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://5.imimg.com/data5/SELLER/Default/2024/6/429460292/IM/SD/EW/14162402/24x7-pharmacy-services-500x500.jpg" alt="Pharmacy">
+                    <div class="gallery-overlay">
+                        <h3>24/7 Pharmacy</h3>
+                        <p>Cancer medications & supplies</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/073/214/636/small/emergency-department-corridor-showing-gurney-and-signage-indicating-the-direction-to-the-emergency-room-in-a-hospital-setting-with-bright-artificial-lighting-photo.jpeg" alt="Emergency Dept">
+                    <div class="gallery-overlay">
+                        <h3>Emergency Dept</h3>
+                        <p>Oncology emergencies handled 24/7</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy0Qtb1M99lg8le_WSTfenZ002FRiwCusItg&s" alt="ICU">
+                    <div class="gallery-overlay">
+                        <h3>Advanced ICU</h3>
+                        <p>Critical cancer care monitoring</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Book Your Appointment Today</h2>
+            <p>Expert care at affordable prices</p>
+            <a href="appointment.html" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <a href="home.html" class="footer-logo"><i class="fas fa-hospital-symbol"></i><span>CityCare</span></a>
+CityCare Cancer Hospital - Comprehensive cancer care with NABH accreditation and 30+ oncology specialists.
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="home.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Our Doctors</a></li>
+                        <li><a href="appointment.html"><i class="fas fa-chevron-right"></i> Book Appointment</a></li>
+                        <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Departments</h4>
+                    <ul>
+                        <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Medical Oncology</a></li>
+                        <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Radiation Oncology</a></li>
+                        <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Surgical Oncology</a></li>
+                        <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Pediatric Oncology</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><p>398, Ramkrishnapur Rd, near Jagadighata Market<br>Barasat, Kolkata, West Bengal 700125</p></div>
+                    <div class="contact-item"><i class="fas fa-phone-alt"></i><p>+91 74394 50337<br>+91 98765 43210</p></div>
+                    <div class="contact-item"><i class="fas fa-envelope"></i><p>info@citycare.com<br>support@citycare.com</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container"><p>&copy; 2024 CityCare Hospital. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Records | CityCare Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; padding: 20px; }
+        
+        .container { max-width: 1100px; margin: 0 auto; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .header { background: white; border-radius: 20px; padding: 25px 30px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #1e293b; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; }
+        .header h1 i { color: #3b82f6; }
+        .back-btn { background: #f1f5f9; color: #64748b; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { background: #e2e8f0; color: #3b82f6; }
+        
+        .search-bar { background: white; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; gap: 15px; }
+        .search-bar input { flex: 1; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; }
+        .search-bar input:focus { outline: none; border-color: #3b82f6; }
+        .search-bar button { background: linear-gradient(135deg, #1e3a5f, #2d5a87); color: white; border: none; padding: 14px 30px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        
+        .records-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .record-card { background: white; border-radius: 18px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); transition: 0.3s; }
+        .record-card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.12); }
+        
+        .record-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .record-header h3 { color: #1e293b; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .record-header h3 i { color: #3b82f6; }
+        .record-id { background: #f1f5f9; padding: 6px 12px; border-radius: 8px; font-size: 12px; color: #64748b; }
+        
+        .record-info { display: flex; flex-direction: column; gap: 12px; }
+        .record-info p { color: #64748b; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+        .record-info p strong { color: #334155; }
+        
+        .record-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .record-actions button { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+        .view-btn { background: #e0f2fe; color: #0284c7; }
+        .view-btn:hover { background: #bae6fd; }
+        .download-btn { background: #dcfce7; color: #16a34a; }
+        .download-btn:hover { background: #bbf7d0; }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e3a5f, #2d5a87);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-item {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail-item label {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item p {
+            color: #1e293b;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            padding: 0 30px 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .modal-btn.close {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .modal-btn.close:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn.download {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: white;
+        }
+
+        .modal-btn.download:hover {
+            background: linear-gradient(135deg, #15803d, #166534);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(22, 163, 74, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) { 
+            .records-grid { grid-template-columns: 1fr; } 
+            .search-bar { flex-direction: column; } 
+            .header { flex-direction: column; gap: 15px; }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Emergency Banner 
+    <div class="emergency-banner">
+        <div class="emergency-content">
+            <div class="emergency-icon">
+                <i class="fas fa-ambulance"></i>
+            </div>
+            <div class="emergency-text">
+                <span class="emergency-label">24/7 Emergency</span>
+                <span class="emergency-number">+91 74394 50337</span>
+            </div>
+        </div>
+        <a href="tel:+917439450337" class="emergency-call-btn">
+            <i class="fas fa-phone-alt"></i> Call Now
+        </a>
+    </div> -->  
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-medical"></i> Medical Records</h1>
+href="#" onclick="goToDashboard(); return false;"
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by Patient Name, ID, or Department..." onkeyup="searchRecords()">
+            <button onclick="searchRecords()"><i class="fas fa-search"></i> Search</button>
+        </div>
+        
+        <div class="records-grid" id="recordsGrid">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+    </div>
+
+    <!-- View Patient Modal -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-injured"></i> Patient Medical Record</h3>
+                <button class="modal-close" onclick="closeViewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid" id="patientDetails">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn close" onclick="closeViewModal()">Close</button>
+                <button class="modal-btn download" onclick="downloadRecord()">
+                    <i class="fas fa-download"></i> Download Record
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allPatients = [];
+        let currentPatient = null;
+
+        // Load patients from API on page load
+        window.onload = function() {
+            loadPatients();
+        }
+
+        async function loadPatients() {
+            try {
+                const response = await fetch('/api/patients');
+                allPatients = await response.json();
+                renderRecords(allPatients);
+            } catch (error) {
+                console.error('Error loading patients:', error);
+                // Load sample data if API fails
+                loadSampleData();
+            }
+        }
+
+        function loadSampleData() {
+            allPatients = [
+                { id: 'CC1001', patientName: 'Rajesh Kumar', age: 45, gender: 'Male', department: 'Cardiology', appDate: '15 Jan 2026', symptoms: 'Chest pain, Breathlessness', doctor: 'Dr. Rahul Sharma' },
+                { id: 'CC1002', patientName: 'Sunita Devi', age: 38, gender: 'Female', department: 'Neurology', appDate: '14 Jan 2026', symptoms: 'Headache, Dizziness', doctor: 'Dr. Priya Singh' },
+                { id: 'CC1003', patientName: 'Amit Sharma', age: 52, gender: 'Male', department: 'Orthopedics', appDate: '13 Jan 2026', symptoms: 'Joint pain', doctor: 'Dr. Amit Kumar' },
+                { id: 'CC1004', patientName: 'Priya Verma', age: 29, gender: 'Female', department: 'Pediatrics', appDate: '12 Jan 2026', symptoms: 'Fever, Cough', doctor: 'Dr. Sunita Rao' }
+            ];
+            renderRecords(allPatients);
+        }
+
+        function renderRecords(patients) {
+            const grid = document.getElementById('recordsGrid');
+            
+            if (patients.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No medical records found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = patients.map(patient => `
+                <div class="record-card">
+                    <div class="record-header">
+                        <h3><i class="fas fa-user-injured"></i> ${patient.patientName}</h3>
+                        <span class="record-id">${patient.id}</span>
+                    </div>
+                    <div class="record-info">
+                        <p><strong>Age:</strong> ${patient.age} years</p>
+                        <p><strong>Gender:</strong> ${patient.gender}</p>
+                        <p><strong>Department:</strong> ${patient.department}</p>
+                        <p><strong>Last Visit:</strong> ${patient.appDate || 'N/A'}</p>
+                        <p><strong>Diagnosis:</strong> ${patient.symptoms || 'General checkup'}</p>
+                        <p><strong>Doctor:</strong> ${patient.doctor || 'General Physician'}</p>
+                    </div>
+                    <div class="record-actions">
+                        <button class="view-btn" onclick="viewRecord('${patient.id}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button class="download-btn" onclick="downloadRecordById('${patient.id}')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchRecords() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = allPatients.filter(patient => 
+                patient.patientName.toLowerCase().includes(input) ||
+                patient.id.toLowerCase().includes(input) ||
+                patient.department.toLowerCase().includes(input)
+            );
+            
+            renderRecords(filtered);
+        }
+
+        function viewRecord(id) {
+            currentPatient = allPatients.find(p => p.id === id);
+            
+            if (!currentPatient) {
+                alert('Patient record not found');
+                return;
+            }
+
+            const detailsHtml = `
+                <div class="detail-item">
+                    <label>Patient ID</label>
+                    <p>${currentPatient.id}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Patient Name</label>
+                    <p>${currentPatient.patientName}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Age</label>
+                    <p>${currentPatient.age} years</p>
+                </div>
+                <div class="detail-item">
+                    <label>Gender</label>
+                    <p>${currentPatient.gender}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Phone</label>
+                    <p>${currentPatient.phone || 'N/A'}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Department</label>
+                    <p>${currentPatient.department}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Last Visit</label>
+                    <p>${currentPatient.appDate || 'N/A'}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Appointment Time</label>
+                    <p>${currentPatient.appTime || 'N/A'}</p>
+                </div>
+                <div class="detail-item full">
+                    <label>Symptoms / Diagnosis</label>
+                    <p>${currentPatient.symptoms || 'General checkup'}</p>
+                </div>
+                <div class="detail-item full">
+                    <label>Treating Doctor</label>
+                    <p>${currentPatient.doctor || 'General Physician'}</p>
+                </div>
+            `;
+
+            document.getElementById('patientDetails').innerHTML = detailsHtml;
+            document.getElementById('viewModal').classList.add('active');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').classList.remove('active');
+            currentPatient = null;
+        }
+
+        // Download record for current patient in view modal
+        function downloadRecord() {
+            if (!currentPatient) return;
+            generateDownload(currentPatient);
+        }
+
+        // Download record directly from card
+        function downloadRecordById(id) {
+            const patient = allPatients.find(p => p.id === id);
+            if (patient) {
+                generateDownload(patient);
+            }
+        }
+
+        // Generate and download the medical record
+        function generateDownload(patient) {
+            const recordContent = `
+================================
+CITYCARE HOSPITAL
+Medical Record
+================================
+
+Patient Information
+-------------------
+Patient ID    : ${patient.id}
+Patient Name  : ${patient.patientName}
+Age          : ${patient.age} years
+Gender       : ${patient.gender}
+Phone        : ${patient.phone || 'N/A'}
+Email        : ${patient.email || 'N/A'}
+
+Appointment Details
+-------------------
+Department    : ${patient.department}
+Doctor       : ${patient.doctor || 'General Physician'}
+Appointment  : ${patient.appDate || 'N/A'}
+Time         : ${patient.appTime || 'N/A'}
+
+Medical Information
+-------------------
+Symptoms     : ${patient.symptoms || 'General checkup'}
+Status       : ${patient.status || 'Completed'}
+
+================================
+Generated on: ${new Date().toLocaleString()}
+CityCare Hospital
+================================
+            `;
+
+            // Create blob and download
+            const blob = new Blob([recordContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Medical_Record_${patient.patientName.replace(/\s+/g, '_')}_${patient.id}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('viewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeViewModal();
+            }
+        });
+    </script>
+</body>
+</html>
+

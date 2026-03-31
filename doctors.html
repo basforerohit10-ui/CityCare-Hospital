@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Doctors | CityCare Hospital</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .contact-item p a[href^="tel:"] {
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="home.html" class="logo">
+                <i class="fas fa-hospital"></i>
+                <div class="logo-text">
+                    <span class="logo-main">CityCare</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="doctors.html" class="active">Doctors</a></li>
+                <li><a href="appointment.html">Appointment</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="doctor_login.html">Doctor Login</a></li>
+                <li><a href="receptionist_login.html">Receptionist Login</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="tel:+917439450337" class="emergency-btn"><i class="fas fa-ambulance"></i> Emergency</a>
+            </div>
+            <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="hero">
+        <div class="hero-slider">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&q=80');">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+Elite Oncology Team
+                    <h1>Our Expert <span>Doctors</span></h1>
+Meet our elite team of specialist doctors providing comprehensive multidisciplinary healthcare.
+                    <div class="hero-buttons">
+                        <a href="appointment.html" class="btn btn-primary">Book Appointment <i class="fas fa-arrow-right"></i></a>
+                        <a href="contact.html" class="btn btn-outline">Contact Us <i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="quick-appointment">
+        <div class="container">
+            <div class="quick-appointment-box">
+                <div class="qa-content">
+                    <h2><i class="fas fa-filter"></i> Find a Doctor</h2>
+                    <p>Search by department to find the right specialist</p>
+                </div>
+                <div class="qa-form">
+                    <select id="filterDept" onchange="filterDoctors()">
+                        <option value="">All Departments</option>
+<option value="Medical Oncology">Medical Oncology</option>
+                        <option value="Radiation Oncology">Radiation Oncology</option>
+                        <option value="Surgical Oncology">Surgical Oncology</option>
+                        <option value="Pediatric Oncology">Pediatric Oncology</option>
+                        <option value="Gynec Oncology">Gynec Oncology</option>
+                        <option value="Hemato Oncology">Hemato Oncology</option>
+                        <option value="Head & Neck Oncology">Head & Neck Oncology</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="filterDoctors()"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                <div class="stat-number" data-count="30">0</div>
+                <div class="stat-label">Expert Doctors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
+                <div class="stat-number" data-count="25">0</div>
+                <div class="stat-label">Specialties</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number" data-count="50000">0</div>
+                <div class="stat-label">Happy Patients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="stat-number" data-count="25">0</div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Doctors Section -->
+    <section class="doctors-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="subtitle">Our Medical Experts</span>
+                <h2>Meet Our Specialist Doctors</h2>
+                <p>Book an appointment with our highly experienced doctors</p>
+            </div>
+            <div class="doctors-grid">
+                <!-- Doctor 1 -->
+                <div class="doctor-card" data-dept="Medical Oncology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Medical Oncology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80" alt="Dr. Rahul Sharma">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Rahul Sharma</h3>
+                        <span class="specialty">Medical Oncologist</span>
+                        <p class="qualification">MBBS, MD, DM Medical Oncology</p>
+                        <p class="experience">18+ Years Experience (Breast/Lung Cancer)</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 2 -->
+                <div class="doctor-card" data-dept="Radiation Oncology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Radiation Oncology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&q=80" alt="Dr. Amit Kumar">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Amit Kumar</h3>
+                        <span class="specialty">Radiation Oncologist</span>
+                        <p class="qualification">MBBS, MD, DM Radiation Oncology</p>
+                        <p class="experience">15+ Years Experience (IMRT/SBRT)</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 3 -->
+                <div class="doctor-card" data-dept="Surgical Oncology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Surgical Oncology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://max-website20-images.s3.ap-south-1.amazonaws.com/small_sks_marya_6b4c17da24.png" alt="Dr. Vikram Patel">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Vikram Patel</h3>
+                        <span class="specialty">Surgical Oncologist</span>
+                        <p class="qualification">MBBS, MS, M.Ch Surgical Oncology</p>
+                        <p class="experience">16+ Years Experience (GI/Head & Neck)</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 4 -->
+                <div class="doctor-card" data-dept="Pediatrics">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Pediatrics</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80" alt="Dr. Sanjay Gupta">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Sanjay Gupta</h3>
+                        <span class="specialty">Pediatrician</span>
+                        <p class="qualification">MBBS, MD Pediatrics</p>
+                        <p class="experience">12+ Years Experience</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 5 -->
+                <div class="doctor-card" data-dept="Gynecology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Gynecology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&q=80" alt="Dr. Priya Singh">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Priya Singh</h3>
+                        <span class="specialty">Gynecologist</span>
+                        <p class="qualification">MBBS, MD, DGO</p>
+                        <p class="experience">14+ Years Experience</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 6 -->
+                <div class="doctor-card" data-dept="Dermatology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Dermatology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&q=80" alt="Dr. Anjali Patel">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Anjali Patel</h3>
+                        <span class="specialty">Dermatologist</span>
+                        <p class="qualification">MBBS, MD Dermatology</p>
+                        <p class="experience">11+ Years Experience</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 7 -->
+                <div class="doctor-card" data-dept="Ophthalmology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Ophthalmology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://parashospitals-web.s3.ap-south-1.amazonaws.com/doctor-lists/May2024/PT-PAT-00457.jpg" alt="Dr. Rahul Verma">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Rahul Verma</h3>
+                        <span class="specialty">Ophthalmologist</span>
+                        <p class="qualification">MBBS, MS Ophthalmology</p>
+                        <p class="experience">10+ Years Experience</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+
+                <!-- Doctor 8 -->
+                <div class="doctor-card" data-dept="Cardiology">
+                    <div class="doctor-img">
+                        <span class="doctor-category">Cardiology</span>
+                        <span class="doctor-availability">Available Today</span>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGFyL5wkCnA7EdQ94Vq2Fat2Ty5hAkBvJC9g&s" alt="Dr. Raj Malhotra">
+                    </div>
+                    <div class="doctor-info">
+                        <h3>Dr. Raj Malhotra</h3>
+                        <span class="specialty">Cardiologist</span>
+                        <p class="qualification">MBBS, MD, FACC</p>
+                        <p class="experience">20+ Years Experience</p>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <a href="appointment.html" class="btn btn-primary btn-small">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Need a Second Opinion?</h2>
+                <p>Our expert doctors are here to provide you with the best medical advice.</p>
+                <div class="cta-buttons">
+                    <a href="appointment.html" class="btn btn-white">Book Appointment</a>
+                    <a href="contact.html" class="btn btn-outline">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-about">
+                        <a href="home.html" class="footer-logo">
+                            <i class="fas fa-hospital-symbol"></i>
+                            <span>CityCare</span>
+                        </a>
+                        <p>CityCare Hospital is a leading multi-specialty hospital committed to providing exceptional healthcare services.</p>
+                        <div class="footer-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="home.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                            <li><a href="appointment.html"><i class="fas fa-chevron-right"></i> Appointment</a></li>
+                            <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Departments</h4>
+                        <ul>
+                            <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Cardiology</a></li>
+                            <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Neurology</a></li>
+                            <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Orthopedics</a></li>
+                            <li><a href="doctors.html"><i class="fas fa-chevron-right"></i> Pediatrics</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h4>Contact Info</h4>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>398, Ramkrishnapur Rd, near Jagadighata Market<br>Barasat, Kolkata, West Bengal 700125</p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <p><a href="tel:+917439450337">+91 74394 50337</a><br><a href="tel:+919876543210">+91 98765 43210</a></p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <p>info@citycare.com<br>support@citycare.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 CityCare Hospital. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Filter Doctors by Department
+        function filterDoctors() {
+            const selectedDept = document.getElementById('filterDept').value;
+            const cards = document.querySelectorAll('.doctor-card');
+            
+            cards.forEach(card => {
+                const dept = card.getAttribute('data-dept');
+                if (selectedDept === '' || dept === selectedDept) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Stats Counter Animation
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-count'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                const updateCount = () => {
+                    current += increment;
+                    if (current < target) {
+                        stat.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        stat.textContent = target.toLocaleString() + '+';
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // Mobile Menu Toggle
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Start stats animation on load
+        window.addEventListener('load', animateStats);
+
+        // Scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections
+        document.querySelectorAll('section, .doctor-card, .info-card, .stat-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+

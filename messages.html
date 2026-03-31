@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | CityCare Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; padding: 20px; }
+        
+        .container { max-width: 1100px; margin: 0 auto; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .header { background: white; border-radius: 20px; padding: 25px 30px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #1e293b; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; }
+        .header h1 i { color: #3b82f6; }
+        .back-btn { background: #f1f5f9; color: #64748b; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { background: #e2e8f0; color: #3b82f6; }
+        
+        .messages-container { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; }
+        
+        .conversations-list { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .conversations-list h3 { color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .conversations-list h3 i { color: #3b82f6; }
+        
+        .conversation-item { display: flex; align-items: center; gap: 12px; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        .conversation-item:hover { background: #f8fafc; }
+        .conversation-item.active { background: #eff6ff; border: 2px solid #3b82f6; }
+        .conversation-avatar { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; }
+        .conversation-avatar.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .conversation-avatar.green { background: linear-gradient(135deg, #16a34a, #16a34a); }
+        .conversation-avatar.orange { background: linear-gradient(135deg, #ea580c, #d97706); }
+        .conversation-info { flex: 1; }
+        .conversation-info h4 { color: #1e293b; font-size: 14px; margin-bottom: 3px; }
+        .conversation-info p { color: #64748b; font-size: 12px; }
+        .conversation-time { color: #94a3b8; font-size: 11px; }
+        
+        .chat-area { background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .chat-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; }
+        .chat-header h3 { color: #1e293b; font-size: 1.1rem; }
+        .chat-header span { font-size: 12px; color: #16a34a; }
+        
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; max-height: 400px; }
+        .message { margin-bottom: 20px; display: flex; gap: 12px; }
+        .message.received { justify-content: flex-start; }
+        .message.sent { justify-content: flex-end; }
+        
+        .message-bubble { max-width: 70%; padding: 14px 18px; border-radius: 18px; font-size: 14px; }
+        .message.received .message-bubble { background: #f1f5f9; color: #1e293b; border-bottom-left-radius: 4px; }
+        .message.sent .message-bubble { background: #3b82f6; color: white; border-bottom-right-radius: 4px; }
+        
+        .chat-input { padding: 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; }
+        .chat-input input { flex: 1; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 25px; font-size: 14px; }
+        .chat-input input:focus { outline: none; border-color: #3b82f6; }
+        .chat-input button { background: #3b82f6; color: white; border: none; padding: 14px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .chat-input button:hover { background: #2563eb; }
+        
+        @media (max-width: 768px) { .messages-container { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-envelope"></i> Messages</h1>
+href="#" onclick="goToDashboard(); return false;"
+        </div>
+        
+        <div class="messages-container">
+            <div class="conversations-list">
+                <h3><i class="fas fa-comments"></i> Conversations</h3>
+                <div class="conversation-item active">
+                    <div class="conversation-avatar blue">AK</div>
+                    <div class="conversation-info">
+                        <h4>Ankit Kumar</h4>
+                        <p>Thank you doctor...</p>
+                    </div>
+                    <div class="conversation-time">10:30 AM</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-avatar green">SP</div>
+                    <div class="conversation-info">
+                        <h4>Sarita Patel</h4>
+                        <p>When should I take...</p>
+                    </div>
+                    <div class="conversation-time">Yesterday</div>
+                </div>
+                <div class="conversation-item">
+                    <div class="conversation-avatar orange">RJ</div>
+                    <div class="conversation-info">
+                        <h4>Rajesh Johnson</h4>
+                        <p>My chest pain is...</p>
+                    </div>
+                    <div class="conversation-time">Yesterday</div>
+                </div>
+            </div>
+            
+            <div class="chat-area">
+                <div class="chat-header">
+                    <div class="conversation-avatar blue">AK</div>
+                    <div>
+                        <h3>Ankit Kumar</h3>
+                        <span><i class="fas fa-circle"></i> Online</span>
+                    </div>
+                </div>
+                <div class="chat-messages">
+                    <div class="message received">
+                        <div class="message-bubble">Hello Doctor, I wanted to ask about my ECG results.</div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-bubble">Hi Ankit, your ECG results look normal. Keep taking the medication as prescribed.</div>
+                    </div>
+                    <div class="message received">
+                        <div class="message-bubble">Thank you doctor! Should I come for a follow-up?</div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-bubble">Yes, please schedule a follow-up after 2 weeks. Stay healthy!</div>
+                    </div>
+                    <div class="message received">
+                        <div class="message-bubble">Thank you doctor! 🙏</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Type your message...">
+                    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            alert('Message sent successfully!');
+        }
+    </script>
+</body>
+</html>

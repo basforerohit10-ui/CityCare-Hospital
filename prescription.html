@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Prescription | CityCare Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; padding: 20px; }
+        
+        .container { max-width: 900px; margin: 0 auto; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .header { background: white; border-radius: 20px; padding: 25px 30px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #1e293b; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; }
+        .header h1 i { color: #3b82f6; }
+        .back-btn { background: #f1f5f9; color: #64748b; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { background: #e2e8f0; color: #3b82f6; }
+        
+        .form-card { background: white; border-radius: 20px; padding: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .form-title { color: #1e293b; font-size: 1.3rem; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .form-title i { color: #3b82f6; }
+        
+        .patient-info { background: #f8fafc; border-radius: 15px; padding: 20px; margin-bottom: 25px; border: 2px solid #e2e8f0; }
+        .patient-info h3 { color: #1e293b; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .patient-info h3 i { color: #3b82f6; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #334155; font-weight: 600; font-size: 13px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 14px; transition: all 0.3s; background: #f8fafc; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3b82f6; background: white; box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+        
+        .medicine-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 15px; align-items: end; }
+        .medicine-row input, .medicine-row select { padding: 12px 15px; }
+        .remove-btn { background: #fee2e2; color: #dc2626; border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .remove-btn:hover { background: #fecaca; }
+        
+        .add-medicine { background: #dcfce7; color: #16a34a; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .add-medicine:hover { background: #bbf7d0; }
+        
+        .btn-group { display: flex; gap: 15px; margin-top: 25px; }
+        .btn { padding: 14px 30px; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .btn-primary { background: linear-gradient(135deg, #1e3a5f, #2d5a87); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(30,58,95,0.3); }
+        .btn-secondary { background: #f1f5f9; color: #64748b; }
+        
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .medicine-row { grid-template-columns: 1fr; } .header { flex-direction: column; gap: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-prescription"></i> Create Prescription</h1>
+href="#" onclick="goToDashboard(); return false;"
+        </div>
+        
+        <div class="form-card">
+            <div class="patient-info">
+                <h3><i class="fas fa-user-injured"></i> Patient Details</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Patient Name</label>
+                        <input type="text" id="patientName" placeholder="Search patient...">
+                    </div>
+                    <div class="form-group">
+                        <label>Patient ID</label>
+                        <input type="text" id="patientId" placeholder="CC-XXXX">
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="form-title"><i class="fas fa-pills"></i> Medicines</h2>
+            <div id="medicinesContainer">
+                <div class="medicine-row">
+                    <input type="text" placeholder="Medicine Name">
+                    <input type="text" placeholder="Dosage">
+                    <select><option>Morning</option><option>Afternoon</option><option>Evening</option><option>Night</option></select>
+                    <input type="text" placeholder="Days">
+                    <button class="remove-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <button class="add-medicine" onclick="addMedicine()"><i class="fas fa-plus"></i> Add Medicine</button>
+            
+            <div class="form-group" style="margin-top: 20px;">
+                <label><i class="fas fa-stethoscope"></i> Diagnosis</label>
+                <textarea id="diagnosis" rows="2" placeholder="Enter diagnosis..."></textarea>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-comment-medical"></i> Additional Instructions</label>
+                <textarea id="instructions" rows="3" placeholder="Special instructions for patient..."></textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-check"></i> Follow-up Date</label>
+                    <input type="date" id="followUp">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-md"></i> Doctor Signature</label>
+                    <input type="text" placeholder="Dr. Name" value="Dr. Rahul Sharma">
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="savePrescription()"><i class="fas fa-save"></i> Save Prescription</button>
+                <button class="btn btn-secondary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addMedicine() {
+            const div = document.createElement('div');
+            div.className = 'medicine-row';
+            div.innerHTML = `<input type="text" placeholder="Medicine Name"><input type="text" placeholder="Dosage"><select><option>Morning</option><option>Afternoon</option><option>Evening</option><option>Night</option></select><input type="text" placeholder="Days"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            document.getElementById('medicinesContainer').appendChild(div);
+        }
+        function savePrescription() {
+            alert('Prescription Saved Successfully!');
+            window.location.href = 'doctor_login.html';
+        }
+    </script>
+</body>
+</html>

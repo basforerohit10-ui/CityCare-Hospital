@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Reports | CityCare Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; padding: 20px; }
+        
+        .container { max-width: 1100px; margin: 0 auto; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .header { background: white; border-radius: 20px; padding: 25px 30px; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #1e293b; font-size: 1.5rem; display: flex; align-items: center; gap: 12px; }
+        .header h1 i { color: #3b82f6; }
+        .back-btn { background: #f1f5f9; color: #64748b; padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { background: #e2e8f0; color: #3b82f6; }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
+        .stat-box { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        .stat-box i { font-size: 28px; margin-bottom: 10px; }
+        .stat-box.blue i { color: #3b82f6; }
+        .stat-box.green i { color: #16a34a; }
+        .stat-box.orange i { color: #ea580c; }
+        .stat-box.red i { color: #dc2626; }
+        .stat-box h3 { font-size: 1.5rem; color: #1e293b; }
+        .stat-box p { font-size: 12px; color: #64748b; }
+        
+        .reports-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .reports-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .reports-header h2 { color: #1e293b; display: flex; align-items: center; gap: 10px; }
+        .reports-header h2 i { color: #3b82f6; }
+        .filter-btn { background: #f1f5f9; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; color: #64748b; }
+        
+        /* Scrollable Table */
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table thead {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 1;
+        }
+        .report-table th { text-align: left; padding: 15px; color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
+        .report-table td { padding: 18px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .report-table tr:hover { background: #f8fafc; }
+        
+        .patient-cell { display: flex; flex-direction: column; }
+        .patient-cell strong { color: #1e293b; }
+        .patient-cell small { color: #94a3b8; font-size: 12px; }
+        
+        .test-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; }
+        .test-badge.blood { background: #fee2e2; color: #dc2626; }
+        .test-badge.ecg { background: #dbeafe; color: #2563eb; }
+        .test-badge.xray { background: #fef3c7; color: #d97706; }
+        .test-badge.urine { background: #dcfce7; color: #16a34a; }
+        
+        .status-badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-badge.ready { background: #dcfce7; color: #16a34a; }
+        .status-badge.pending { background: #fef3c7; color: #d97706; }
+        .status-badge.processing { background: #dbeafe; color: #2563eb; }
+        
+        .action-btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .action-btn.view { background: #e0f2fe; color: #0284c7; }
+        .action-btn.view:hover { background: #bae6fd; }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e3a5f, #2d5a87);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .report-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .report-detail-item {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .report-detail-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .report-detail-item label {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .report-detail-item p {
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .report-detail-item p.normal {
+            color: #16a34a;
+        }
+
+        .report-detail-item p.warning {
+            color: #d97706;
+        }
+
+        .report-detail-item p.abnormal {
+            color: #dc2626;
+        }
+
+        .test-results {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .test-results h4 {
+            color: #1e293b;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .test-result-row:last-child {
+            border-bottom: none;
+        }
+
+        .test-result-row .test-name {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .test-result-row .test-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .modal-footer {
+            padding: 0 30px 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-btn.close {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .modal-btn.close:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn.print {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .modal-btn.print:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        .modal-btn.download {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: white;
+        }
+
+        .modal-btn.download:hover {
+            background: linear-gradient(135deg, #15803d, #166534);
+        }
+
+        @media (max-width: 1024px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { 
+            .stats-row { grid-template-columns: 1fr; } 
+            .report-table { font-size: 12px; } 
+            .header { flex-direction: column; gap: 15px; }
+            .report-detail-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Emergency Banner 
+    <div class="emergency-banner">
+        <div class="emergency-content">
+            <div class="emergency-icon">
+                <i class="fas fa-ambulance"></i>
+            </div>
+            <div class="emergency-text">
+                <span class="emergency-label">24/7 Emergency</span>
+                <span class="emergency-number">+91 74394 50337</span>
+            </div>
+        </div>
+        <a href="tel:+917439450337" class="emergency-call-btn">
+            <i class="fas fa-phone-alt"></i> Call Now
+        </a>
+    </div> -->
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-flask"></i> Lab Reports</h1>
+href="#" onclick="goToDashboard(); return false;"
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat-box blue">
+                <i class="fas fa-vial"></i>
+                <h3>24</h3>
+                <p>Blood Tests</p>
+            </div>
+            <div class="stat-box green">
+                <i class="fas fa-heartbeat"></i>
+                <h3>8</h3>
+                <p>ECG Reports</p>
+            </div>
+            <div class="stat-box orange">
+                <i class="fas fa-x-ray"></i>
+                <h3>5</h3>
+                <p>X-Ray / MRI</p>
+            </div>
+            <div class="stat-box red">
+                <i class="fas fa-tint"></i>
+                <h3>12</h3>
+                <p>Urine Tests</p>
+            </div>
+        </div>
+        
+        <div class="reports-card">
+            <div class="reports-header">
+                <h2><i class="fas fa-list"></i> All Lab Reports</h2>
+                <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+            </div>
+            <div class="table-container">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Test Type</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="patient-cell">
+                                    <strong>Rajesh Kumar</strong>
+                                    <small>CC-1001</small>
+                                </div>
+                            </td>
+                            <td><span class="test-badge blood"><i class="fas fa-tint"></i> Blood Test</span></td>
+                            <td>15 Jan 2026</td>
+                            <td><span class="status-badge ready">Ready</span></td>
+                            <td><button class="action-btn view" onclick="viewLabReport('blood', 'Rajesh Kumar', 'CC-1001', '15 Jan 2026', 'Dr. Rahul Sharma')"><i class="fas fa-eye"></i> View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-cell">
+                                    <strong>Sunita Devi</strong>
+                                    <small>CC-1002</small>
+                                </div>
+                            </td>
+                            <td><span class="test-badge ecg"><i class="fas fa-heartbeat"></i> ECG</span></td>
+                            <td>14 Jan 2026</td>
+                            <td><span class="status-badge ready">Ready</span></td>
+                            <td><button class="action-btn view" onclick="viewLabReport('ecg', 'Sunita Devi', 'CC-1002', '14 Jan 2026', 'Dr. Priya Singh')"><i class="fas fa-eye"></i> View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-cell">
+                                    <strong>Amit Sharma</strong>
+                                    <small>CC-1003</small>
+                                </div>
+                            </td>
+                            <td><span class="test-badge xray"><i class="fas fa-x-ray"></i> X-Ray</span></td>
+                            <td>13 Jan 2026</td>
+                            <td><span class="status-badge ready">Ready</span></td>
+                            <td><button class="action-btn view" onclick="viewLabReport('xray', 'Amit Sharma', 'CC-1003', '13 Jan 2026', 'Dr. Amit Kumar')"><i class="fas fa-eye"></i> View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-cell">
+                                    <strong>Priya Verma</strong>
+                                    <small>CC-1004</small>
+                                </div>
+                            </td>
+                            <td><span class="test-badge urine"><i class="fas fa-flask"></i> Urine Test</span></td>
+                            <td>12 Jan 2026</td>
+                            <td><span class="status-badge ready">Ready</span></td>
+                            <td><button class="action-btn view" onclick="viewLabReport('urine', 'Priya Verma', 'CC-1004', '12 Jan 2026', 'Dr. Sunita Rao')"><i class="fas fa-eye"></i> View</button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="patient-cell">
+                                    <strong>Ankit Kumar</strong>
+                                    <small>CC-1005</small>
+                                </div>
+                            </td>
+                            <td><span class="test-badge blood"><i class="fas fa-tint"></i> Lipid Profile</span></td>
+                            <td>11 Jan 2026</td>
+                            <td><span class="status-badge ready">Ready</span></td>
+                            <td><button class="action-btn view" onclick="viewLabReport('lipid', 'Ankit Kumar', 'CC-1005', '11 Jan 2026', 'Dr. Rahul Sharma')"><i class="fas fa-eye"></i> View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lab Report Modal -->
+    <div class="modal-overlay" id="labReportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-flask"></i> Lab Report</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn close" onclick="closeModal()">Close</button>
+                <button class="modal-btn download" onclick="downloadLabReport()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentReport = null;
+
+        const labReportsData = {
+            blood: {
+                title: 'Blood Test Report',
+                icon: 'fa-tint',
+                tests: [
+                    { name: 'Hemoglobin', value: '14.5 g/dL', normal: true, range: '12-16 g/dL' },
+                    { name: 'WBC Count', value: '7,500/cmm', normal: true, range: '4,000-11,000/cmm' },
+                    { name: 'Platelet Count', value: '2.5 lakh', normal: true, range: '1.5-4 lakh' },
+                    { name: 'Blood Group', value: 'B+', normal: true, range: '-' },
+                    { name: 'RBC Count', value: '4.8 million/cumm', normal: true, range: '4-5.5 million' }
+                ],
+                summary: 'All blood parameters are within normal limits.'
+            },
+            ecg: {
+                title: 'ECG Report',
+                icon: 'fa-heartbeat',
+                tests: [
+                    { name: 'Heart Rate', value: '72 bpm', normal: true, range: '60-100 bpm' },
+                    { name: 'Cardiac Rhythm', value: 'Normal Sinus Rhythm', normal: true, range: '-' },
+                    { name: 'PR Interval', value: '0.16 sec', normal: true, range: '0.12-0.20 sec' },
+                    { name: 'QRS Complex', value: '0.08 sec', normal: true, range: '<0.12 sec' },
+                    { name: 'ST Segment', value: 'Normal', normal: true, range: '-' }
+                ],
+                summary: 'No abnormality detected. ECG is normal.'
+            },
+            xray: {
+                title: 'X-Ray Report (Chest)',
+                icon: 'fa-x-ray',
+                tests: [
+                    { name: 'Lungs', value: 'Clear', normal: true, range: '-' },
+                    { name: 'Heart Size', value: 'Normal', normal: true, range: '-' },
+                    { name: 'Consolidation', value: 'None', normal: true, range: '-' },
+                    { name: 'Pleural Effusion', value: 'Absent', normal: true, range: '-' },
+                    { name: 'Impression', value: 'Normal Chest X-Ray', normal: true, range: '-' }
+                ],
+                summary: 'Normal chest radiograph. No acute cardiopulmonary abnormality.'
+            },
+            urine: {
+                title: 'Urine Test Report',
+                icon: 'fa-flask',
+                tests: [
+                    { name: 'Color', value: 'Pale Yellow', normal: true, range: 'Pale Yellow' },
+                    { name: 'Appearance', value: 'Clear', normal: true, range: 'Clear' },
+                    { name: 'pH', value: '6.0', normal: true, range: '5.0-7.0' },
+                    { name: 'Albumin', value: 'Nil', normal: true, range: 'Nil' },
+                    { name: 'Sugar', value: 'Nil', normal: true, range: 'Nil' }
+                ],
+                summary: 'Normal urine analysis. No abnormality detected.'
+            },
+            lipid: {
+                title: 'Lipid Profile Report',
+                icon: 'fa-tint',
+                tests: [
+                    { name: 'Total Cholesterol', value: '210 mg/dL', normal: false, range: '<200 mg/dL' },
+                    { name: 'LDL Cholesterol', value: '130 mg/dL', normal: false, range: '<100 mg/dL' },
+                    { name: 'HDL Cholesterol', value: '45 mg/dL', normal: true, range: '>40 mg/dL' },
+                    { name: 'Triglycerides', value: '150 mg/dL', normal: true, range: '<150 mg/dL' },
+                    { name: 'VLDL', value: '30 mg/dL', normal: true, range: '<30 mg/dL' }
+                ],
+                summary: 'Borderline high cholesterol. LDL is slightly elevated.'
+            }
+        };
+
+        function viewLabReport(type, patientName, patientId, date, doctor) {
+            const report = labReportsData[type];
+            currentReport = { type, patientName, patientId, date, doctor, report };
+
+            document.getElementById('modalTitle').innerHTML = `<i class="fas ${report.icon}"></i> ${report.title}`;
+
+            let testsHtml = report.tests.map(test => `
+                <div class="test-result-row">
+                    <span class="test-name">${test.name}</span>
+                    <span class="test-value ${test.normal ? 'normal' : 'warning'}">${test.value}</span>
+                </div>
+            `).join('');
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="report-detail-grid">
+                    <div class="report-detail-item">
+                        <label>Patient Name</label>
+                        <p>${patientName}</p>
+                    </div>
+                    <div class="report-detail-item">
+                        <label>Patient ID</label>
+                        <p>${patientId}</p>
+                    </div>
+                    <div class="report-detail-item">
+                        <label>Test Date</label>
+                        <p>${date}</p>
+                    </div>
+                    <div class="report-detail-item">
+                        <label>Referring Doctor</label>
+                        <p>${doctor}</p>
+                    </div>
+                </div>
+                <div class="test-results">
+                    <h4><i class="fas ${report.icon}"></i> Test Results</h4>
+                    ${testsHtml}
+                </div>
+                <div class="report-detail-item full" style="margin-top: 15px;">
+                    <label>Summary</label>
+                    <p class="${report.summary.includes('normal') ? 'normal' : 'warning'}">${report.summary}</p>
+                </div>
+            `;
+
+            document.getElementById('labReportModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('labReportModal').classList.remove('active');
+            currentReport = null;
+        }
+
+        function downloadLabReport() {
+            if (!currentReport) return;
+
+            const { patientName, patientId, date, doctor, report } = currentReport;
+
+            let testDetails = report.tests.map(t => `${t.name}: ${t.value}`).join('\n');
+
+            const content = `
+================================
+CITYCARE HOSPITAL
+${report.title}
+================================
+
+Patient Information
+-------------------
+Patient Name  : ${patientName}
+Patient ID    : ${patientId}
+Test Date     : ${date}
+Doctor       : ${doctor}
+
+Test Results
+------------
+${testDetails}
+
+Summary
+-------
+${report.summary}
+
+================================
+Report Generated: ${new Date().toLocaleString()}
+CityCare Hospital
+================================
+            `;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Lab_Report_${patientName.replace(/\s+/g, '_')}_${patientId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('labReportModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
